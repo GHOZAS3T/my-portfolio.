@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INNOCENT DAVID | Frontend Learner, Video Editor and AI Storyteller</title>
+  <meta name="description" content="Portfolio of a beginner frontend developer, video editor and AI animation creator.">
+
+  <style>
+    /* ==========================================================
+       1. DESIGN TOKENS
+       Change colours and fonts here and the whole site updates.
+       ========================================================== */
+    :root {
+      --bg: #0f0e17;
+      --surface: #1a1826;
+      --surface-2: #221f33;
+      --border: #2e2b45;
+      --text: #f2f0fa;
+      --muted: #b6b2cb;
+      --accent: #7c3aed;        /* buttons */
+      --accent-light: #c4b5fd;  /* links and highlights */
+      --warm: #f5b971;          /* small warm highlight, like a film light */
+
+      --font-body: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-display: Georgia, "Times New Roman", serif;
+
+      --radius: 14px;
+      --page-pad: clamp(20px, 6vw, 80px);
+      --max-width: 1120px;
+    }
+
+    /* ==========================================================
+       2. RESET AND BASE
+       ========================================================== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--accent-light); }
+
+    /* Visible keyboard focus for everyone who navigates with Tab */
+    :focus-visible {
+      outline: 3px solid var(--warm);
+      outline-offset: 3px;
+      border-radius: 6px;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 16px;
+      top: -60px;
+      background: var(--warm);
+      color: #1a1100;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      z-index: 100;
+    }
+    .skip-link:focus { top: 12px; }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin-inline: auto;
+      padding-inline: var(--page-pad);
+    }
+
+    section { padding-block: clamp(64px, 10vw, 112px); }
+
+    h1, h2, h3 { font-family: var(--font-display); font-weight: 700; line-height: 1.15; }
+
+    h2 {
+      font-size: clamp(1.9rem, 4vw, 2.6rem);
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+    }
+
+    .section-intro {
+      color: var(--muted);
+      max-width: 60ch;
+      margin-bottom: 40px;
+    }
+
+    /* ==========================================================
+       3. BUTTONS
+       ========================================================== */
+    .button {
+      display: inline-block;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+    .button-primary { background: var(--accent); color: #fff; }
+    .button-primary:hover { background: #6d28d9; transform: translateY(-2px); }
+    .button-secondary { border: 1px solid var(--border); color: var(--text); }
+    .button-secondary:hover { border-color: var(--accent-light); transform: translateY(-2px); }
+
+    /* ==========================================================
+       4. HEADER AND NAVIGATION
+       ========================================================== */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(15, 14, 23, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px 24px;
+      padding-block: 16px;
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .site-nav { display: flex; flex-wrap: wrap; gap: 4px 6px; }
+
+    .site-nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+    .site-nav a:hover { color: var(--text); background: var(--surface); }
+
+    /* ==========================================================
+       5. HERO
+       ========================================================== */
+    .hero {
+      padding-block: clamp(56px, 9vw, 120px);
+      background:
+        radial-gradient(ellipse 60% 50% at 85% 10%, rgba(124, 58, 237, 0.25), transparent 70%),
+        radial-gradient(ellipse 40% 40% at 5% 90%, rgba(245, 185, 113, 0.08), transparent 70%);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: clamp(32px, 6vw, 72px);
+      align-items: center;
+    }
+
+    .hero-label {
+      display: inline-block;
+      color: var(--warm);
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 6.5vw, 4.6rem);
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .hero-text {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 52ch;
+      margin-bottom: 32px;
+    }
+
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+
+    /* Film-frame visual built with CSS only (no image needed) */
+    .film-frame {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(160deg, rgba(124, 58, 237, 0.55), rgba(15, 14, 23, 0.2) 60%),
+        var(--surface);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+
+    .film-frame::before {
+      /* the "play" triangle */
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-35%, -50%);
+      border-style: solid;
+      border-width: 28px 0 28px 46px;
+      border-color: transparent transparent transparent rgba(255, 255, 255, 0.9);
+    }
+
+    .film-frame figcaption {
+      position: absolute;
+      left: 18px;
+      bottom: 14px;
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+
+    .film-frame .rec {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .film-frame .rec::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--warm);
+    }
+
+    /* One gentle page-load animation, switched off for people who prefer less motion */
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .hero-copy  { animation: rise 0.8s ease both; }
+    .hero-visual { animation: rise 0.8s 0.15s ease both; }
+
+    /* ==========================================================
+       6. ABOUT
+       ========================================================== */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: clamp(28px, 6vw, 72px);
+    }
+
+    .about-text p { color: var(--muted); margin-bottom: 18px; max-width: 62ch; }
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .facts {
+      list-style: none;
+      border-left: 2px solid var(--accent);
+      padding-left: 22px;
+      display: grid;
+      gap: 18px;
+      align-self: start;
+    }
+    .facts strong { display: block; color: var(--text); }
+    .facts span { color: var(--muted); font-size: 0.95rem; }
+
+    /* ==========================================================
+       7. SKILLS AND SERVICES
+       ========================================================== */
+    .skills-section { background: var(--surface); border-block: 1px solid var(--border); }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 22px;
+    }
+
+    .card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+    .card:hover { transform: translateY(-4px); border-color: var(--accent-light); }
+
+    .card h3 { font-size: 1.35rem; margin-bottom: 10px; }
+    .card p { color: var(--muted); font-size: 0.97rem; margin-bottom: 18px; }
+
+    .level {
+      display: inline-block;
+      font-size: 0.82rem;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--accent-light);
+    }
+
+    .tools { margin-top: 32px; color: var(--muted); font-size: 0.95rem; }
+    .tools strong { color: var(--text); }
+
+    /* ==========================================================
+       8. FEATURED PROJECT
+       ========================================================== */
+    .project {
+      display: grid;
+      grid-template-columns: 1.4fr 0.6fr;
+      gap: clamp(24px, 4vw, 48px);
+      align-items: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: clamp(16px, 3vw, 32px);
+    }
+
+    .video-wrap {
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .video-wrap video {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .project-info h3 { font-size: 1.6rem; margin-bottom: 12px; }
+    .project-info p { color: var(--muted); margin-bottom: 20px; }
+
+    .meta { list-style: none; display: grid; gap: 10px; font-size: 0.95rem; }
+    .meta li {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .meta span:first-child { color: var(--muted); }
+
+    /* ==========================================================
+       9. CONTACT
+       ========================================================== */
+    .contact-box {
+      text-align: center;
+      background:
+        radial-gradient(ellipse 70% 100% at 50% 0%, rgba(124, 58, 237, 0.28), transparent 70%),
+        var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: clamp(40px, 7vw, 80px) var(--page-pad);
+    }
+    .contact-box .section-intro { margin-inline: auto; }
+
+    .contact-links {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px 28px;
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    /* ==========================================================
+       10. FOOTER
+       ========================================================== */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding-block: 32px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px 24px;
+    }
+
+    /* ==========================================================
+       11. RESPONSIVE LAYOUTS
+       ========================================================== */
+    /* Tablet */
+    @media (max-width: 900px) {
+      .hero-grid,
+      .about-grid,
+      .project { grid-template-columns: 1fr; }
+
+      .hero-visual { max-width: 520px; }
+    }
+
+    /* Mobile */
+    @media (max-width: 560px) {
+      .header-inner { justify-content: center; }
+      .hero-actions .button { width: 100%; text-align: center; }
+      .card { padding: 22px; }
+    }
+
+    /* Respect "reduce motion" settings */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { animation: none !important; transition: none !important; }
+    }
+    
+.menu-toggle {
+  display: none;
+}
+
+@media (max-width: 560px) {
+  .menu-toggle {
+    display: block;
+    padding: 10px 14px;
+    background: #8b5cf6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .header-inner {
+    justify-content: space-between;
+  }
+
+  .site-nav {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .site-nav.is-open {
+    display: flex;
+  }
+}
+
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- ================= HEADER ================= -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="#top">Innocent David</a>
+      <button class="menu-toggle" type="button" aria-expanded="false">☰ Menu</button>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#project">Project</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ================= HERO ================= -->
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="hero-label">Frontend learner, video editor, AI storyteller</span>
+          <h1 id="hero-title">I turn story ideas into moving pictures and web pages.</h1>
+          <p class="hero-text">
+            I'm a beginner frontend developer who edits video and creates short
+            AI-assisted animations. This portfolio is built with HTML and CSS
+            as I learn, and it shows where I am today.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#project">Watch my animation</a>
+            <a class="button button-secondary" href="#contact">Get in touch</a>
+          </div>
+        </div>
+
+        <figure class="film-frame hero-visual" aria-hidden="true">
+          <span class="rec">Featured film</span>
+          <figcaption>One-minute AI story animation</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ================= ABOUT ================= -->
+    <section id="about" aria-labelledby="about-title">
+      <div class="container about-grid">
+        <div>
+          <h2 id="about-title">About me</h2>
+        </div>
+        <div class="about-text">
+          <p>
+            I'm building my skills in web development while creating video and
+            animation. I enjoy learning new tools and turning an idea into
+            something people can watch and use.
+          </p>
+          <p>
+            My editing work taught me about pacing, structure and how to hold
+            attention. I'm bringing that same thinking to the web: clear layouts,
+            readable text and pages that feel good to use.
+          </p>
+          <p>
+            I'm early in my frontend journey, and I'm looking for opportunities
+            to learn, grow and contribute.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SKILLS ================= -->
+    <section class="skills-section" id="skills" aria-labelledby="skills-title">
+      <div class="container">
+        <h2 id="skills-title">Skills and services</h2>
+        <p class="section-intro">
+          What I work on, and an honest view of where I am with each one.
+        </p>
+
+        <div class="cards">
+          <article class="card">
+            <h3>Frontend development</h3>
+            <p>Building responsive, accessible pages with HTML and CSS. JavaScript is next on my learning list.</p>
+            <span class="level">Learning</span>
+          </article>
+
+          <article class="card">
+            <h3>Video editing</h3>
+            <p>Cutting footage together with attention to pacing, storytelling and a clean final presentation.</p>
+            <span class="level">Hands-on experience</span>
+          </article>
+
+          <article class="card">
+            <h3>AI animation and storytelling</h3>
+            <p>Writing story ideas and turning them into short animated scenes with AI tools such as Kling AI.</p>
+            <span class="level">Hands-on experience</span>
+          </article>
+        </div>
+
+        <p class="tools">
+          <strong>Currently working with:</strong> HTML, CSS, VS Code, Kling AI, video editing software.
+        </p>
+      </div>
+    </section>
+
+    <!-- ================= FEATURED PROJECT ================= -->
+    <section id="project" aria-labelledby="project-title">
+      <div class="container">
+        <h2 id="project-title">Featured project</h2>
+        <p class="section-intro">
+          A short film I created and edited myself.
+        </p>
+
+        <article class="project">
+          <div class="video-wrap">
+            <video controls playsinline preload="metadata">
+              <source src="videos/my-animation.mp4" type="video/mp4">
+              Your browser does not support video playback.
+            </video>
+          </div>
+
+          <div class="project-info">
+            <h3>My First AI Story Animation</h3>
+            <p>
+              A one-minute story animation created with AI tools, including
+              Kling AI, and edited by me from start to finish.
+            </p>
+            <ul class="meta">
+              <li><span>Length</span><span>About 1 minute</span></li>
+              <li><span>Made with</span><span>Kling AI</span></li>
+              <li><span>My role</span><span>Story, creation, editing</span></li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section id="contact" aria-labelledby="contact-title">
+      <div class="container">
+        <div class="contact-box">
+          <h2 id="contact-title">Let's connect</h2>
+          <p class="section-intro">
+            Interested in my work or a potential opportunity? Send me a message
+            and I'll reply as soon as I can.
+          </p>
+          <a class="button button-primary" href="mailto:innocentdavid2904@gmail.com">Email me</a>
+
+          <ul class="contact-links">
+            <!-- Replace each # below with your real link, or delete the line -->
+            <li><a href="https://www.linkedin.com/in/david-innocent-929956268/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+            <li>Location: [Lagos, Nigeria]</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>&copy; 2026 Innocent David. All rights reserved.</span>
+      <span>Built with HTML and CSS while learning frontend development.</span>
+    </div>
+  </footer>
+  <script>
+  const menuButton = document.querySelector('.menu-toggle');
+  const nav = document.querySelector('.site-nav');
+
+  menuButton.addEventListener('click', () => {
+    const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
+
+    menuButton.setAttribute('aria-expanded', String(!isOpen));
+    nav.classList.toggle('is-open');
+  });
+</script>
+</body>
+</html>
